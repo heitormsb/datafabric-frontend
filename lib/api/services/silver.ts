@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from '../client';
+import { executionIdentifier } from '../executionIdentifier';
 import type {
   SilverPersistentConfig,
   CreateSilverPersistentConfigRequest,
@@ -82,7 +83,8 @@ export async function deleteSilverPersistentConfig(id: number): Promise<void> {
  * Execute transformation for a persistent config
  */
 export async function executeSilverPersistentConfig(id: number): Promise<SilverExecuteResponse> {
-  return apiClient.post<SilverExecuteResponse>(`${PERSISTENT_BASE_PATH}/${id}/execute`);
+  const result = await apiClient.post<SilverExecuteResponse>(`${PERSISTENT_BASE_PATH}/${id}/execute`);
+  return { ...result, execution_id: executionIdentifier(result) };
 }
 
 /**
